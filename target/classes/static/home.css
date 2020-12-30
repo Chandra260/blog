@@ -1,0 +1,42 @@
+form {
+    max-width: 400px;
+    border-radius: 2px;
+    margin-bottom: 2px;
+}
+
+header{
+    border: 2px solid black;
+}
+
+.posts{
+    padding: 2%;
+    text-align: justify;
+    border: 2px solid black;
+    margin: 2%;
+    width: 40%;
+}
+
+.headings, .foot {
+    margin: 3%;
+    font-size: 20px;
+}
+
+.header{
+    font-size: 40px;
+}
+
+img {
+    margin-left: 30px;
+    width: 10%;
+}
+
+.button {
+    background-color: grey;
+    color: black;
+}
+
+article {
+    display: flex;
+    flex-wrap: wrap;
+    width: 95%;
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/home.css" type="text/css" th:href="@{/home.css}">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>My Published Posts:</h1>
+<span th:each="post : ${posts}"></span>
+<article>
+    <div class="posts" th:each="post : ${posts}">
+        <h2 th:text="${post.title}">Post Title</h2>
+        <i>Posted on</i>
+        <span th:text="${post.publishedAt}">12-Dec-2020</span><br>
+        <!--        <div th:text="${#dates.format(post.publishedAt, 'dd-MMMM-yyyy')}">dateFormat</div>-->
+        <p>Author: <span th:text="${post.author}"></span><p>
+        <p>Tags: <span th:text="${post.tags}"></span></p>
+        <p><span th:text="${post.excerpt}"></span>..</p>
+
+        <form action="view-post" method="POST">
+            <input type="hidden" th:value="${post.id}" name="postId">
+            <input type="submit" value="Read more..">
+        </form>
+    </div>
+</article>
+
+</body>
+</html>

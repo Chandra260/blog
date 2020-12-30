@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/home.css" type="text/css" th:href="@{/viewPostCss.css}">
+    <title>View Blog</title>
+</head>
+<body>
+welcome to viewBlog page..
+<!--    <h1 th:text="${post}"></h1>-->
+<article>
+    <h2 th:text="${post.title}">Post Title</h2>
+    <i>Posted on</i>
+    <span th:text="${post.createdAt}"></span>
+    <span th:text="${post.publishedAt}">12-Dec-2020</span>
+    <p>Author: <span th:text="${post.author}"></span></p>
+    <p>Tags: <span th:text="${post.tags}"></span></p>
+    <p><span th:text="${post.content}"></span></p>
+    <br>
+    <br>
+
+    <nav>
+        <aside sec:authorize="isAuthenticated()">
+            <form action="edit-post" method="GET">
+                <input type="hidden" th:value="${post.id}" name="postId">
+                <input class="button" type="submit" value="edit">
+            </form>
+        </aside>
+        <aside sec:authorize="isAuthenticated()">
+            <form action="delete-post" method="POST">
+                <input type="hidden" th:value="${post.id}" name="postId">
+                <input class="button" type="submit" value="delete">
+            </form>
+        </aside>
+        <aside sec:authorize="isAuthenticated()">
+        <form action="comment/new-comment" method="POST">
+            <!--    <span><a href="comment.html" th:href="@{/createComment}"><input type="submit" value="Comment"></a></span>-->
+            <input type="hidden" th:value="${post.id}" name="postId">
+            <input class="button" type="submit" value="New comment">
+        </form>
+        </aside>
+        <aside sec:authorize="isAnonymous()">
+            <form action="comment/new-comment" method="POST">
+                <!--    <span><a href="comment.html" th:href="@{/createComment}"><input type="submit" value="Comment"></a></span>-->
+                <input type="hidden" th:value="${post.id}" name="postId">
+                <input class="button" type="submit" value="New comment">
+            </form>
+        </aside>
+    </nav>
+</article>
+<br>
+<h1>Comments: </h1>
+
+<div th:each="comment : ${post.comments}">
+    <hr>
+    <span>
+        <p th:text="'Name: ' + ${comment.name}">name</span>
+    <p th:text="'Email: ' + ${comment.email}">email</p>
+    <p th:text="'Comment: ' + ${comment.comment}">comment</p>
+
+    </span>
+    <nav sec:authorize="isAuthenticated()">
+    <span>
+        <form action="comment/edit-comment">
+            <input class="button" type="submit" value="Edit Comment">
+            <input type="hidden" th:value="${comment.id}" name="commentId">
+        </form>
+    </span>
+
+        <span>
+        <form action="comment/delete-comment" method="POST">
+            <input class="button" type="submit" value="Delete Comment">
+            <input type="hidden" th:value="${comment.id}" name="postId">
+        </form>
+    </span>
+    </nav>
+</div>
+
+</article>
+</body>
+</html>

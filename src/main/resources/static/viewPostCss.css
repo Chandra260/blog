@@ -1,0 +1,34 @@
+
+body {
+    background: #fff;
+    padding: 2em 4em 2em;
+    max-width: 90%;
+    border: 1px solid black;
+    border-radius: 2px;
+
+}
+
+input {
+    display: block;
+    box-sizing: border-box;
+    width: 20%;
+    outline: none;
+    margin:0;
+}
+
+.button {
+    background-color: grey;
+    color: black;
+    width: 200px;
+    margin: 2%;
+}
+
+article {
+    border: 2px solid black;
+    padding: 5%;
+}
+
+nav  {
+    display: flex;
+    justify-content: space-around;
+}
