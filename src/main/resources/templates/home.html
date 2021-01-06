@@ -23,28 +23,14 @@
 </header>
 <br>
 
+<!--h2>Welcome</h2>-->
+<!--<p>Spring Security Thymeleaf tutorial</p>-->
+<!--<div sec:authorize="hasRole('USER')">Text visible to user.</div>-->
+<!--<div sec:authorize="hasRole('ADMIN')">Text visible to admin.</div>-->
+<!--<div sec:authorize="isAuthenticated()">-->
+<!--    Text visible only to authenticated users.-->
+<!--</div>-->
 
-<div class="navbar-form navbar-right">
-
-    <div sec:authorize="isAuthenticated()">
-        <a class="btn btn-success"th:href="@{/create-post}">Create Post</a>
-    </div>
-
-    <div sec:authorize="isAnonymous()">
-        <a class="btn btn-success" th:href="@{/login}">Login</a>
-        <a class="btn btn-primary" th:href="@{/register}">Register</a>
-    </div>
-
-</div>
-
-
-h2>Welcome</h2>
-<p>Spring Security Thymeleaf tutorial</p>
-<div sec:authorize="hasRole('USER')">Text visible to user.</div>
-<div sec:authorize="hasRole('ADMIN')">Text visible to admin.</div>
-<div sec:authorize="isAuthenticated()">
-    Text visible only to authenticated users.
-</div>
 Authenticated username:
 <div sec:authentication="name"></div>
 Authenticated user roles:

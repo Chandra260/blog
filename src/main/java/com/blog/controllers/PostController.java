@@ -33,7 +33,7 @@ public class PostController {
     }
 
     @PostMapping("/create-post")
-    public String createNewPost(@RequestParam("title") String title, @RequestParam("author") String author, @RequestParam("tags") String tags, @RequestParam("content") String content) {
+    public String createPost(@RequestParam("title") String title, @RequestParam("author") String author, @RequestParam("tags") String tags, @RequestParam("content") String content) {
         postService.createPost(title, author, tags, content);
         return "home";
     }
