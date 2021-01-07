@@ -15,7 +15,7 @@
     <p>Tags: <span th:text="${post.tags}"></span></p>
     <p><span th:text="${post.excerpt}"></span></p>
 
-    <form action="publish-post" method="POST">
+    <form th:action="publish-post" method="POST">
         <input type="hidden" th:value="${post.id}" name="postId">
         <input class="button" type="submit" value="Publish">
     </form>

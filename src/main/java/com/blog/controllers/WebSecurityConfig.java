@@ -1,6 +1,6 @@
 package com.blog.controllers;
 
-import com.blog.Services.UserService;
+import com.blog.services.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").hasRole("ADMIN")
-                .antMatchers("/").hasRole("USER")
+                .antMatchers("/user/**").hasRole("USER")
                 .antMatchers("/").permitAll()
                 .and()
                 .formLogin().permitAll()

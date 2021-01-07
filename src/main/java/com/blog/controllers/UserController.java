@@ -1,35 +1,52 @@
 package com.blog.controllers;
 
-import com.blog.Services.UserService;
+import com.blog.repositories.UserRepository;
+import com.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
 @Controller
-public class UserController {
+@RequestMapping("/user")
+public class UserController extends PostController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepo;
+    @Autowired
+    private UserRepository commentRepo;
 
-    @RequestMapping("/register")
-    public String register() {
-        return "register";
-    }
+//    @RequestMapping("/login")
+//    public RedirectView login() {
+//        RedirectView redirectView = new RedirectView();
+//        redirectView.setUrl("");
+//    }
 
-    @PostMapping("/register")
-    public String registerUser(@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("password") String password) {
-        userService.addUser(name, email, password);
-        return "home";
-    }
+//    @RequestMapping("/{username}")
+//    public RedirectView homePage(@PathVariable String username) {
+//        RedirectView redirectView = new RedirectView();
+//        redirectView.setUrl("posts");
+//        return redirectView;
+//    }
 
-    @RequestMapping("/user-post")
+    @RequestMapping("/my-post")
     public String userPosts(Principal principal, Model model) {
         model.addAttribute("posts", userService.postsByUser(principal));
-        return "userPost";
+        return "myPost";
+    }
+
+    @RequestMapping("/{email}")
+    public String userProfile(@PathVariable String email, Model model) {
+//        System.out.println(email);
+        model.addAttribute("user",userRepo.findByUserName(email));
+        model.addAttribute("posts", userService.postsByUser(email));
+        model.addAttribute("comments", userRepo.findAllCommentsByUserEmail(email));
+        System.out.println(userRepo.findAllCommentsByUserEmail(email));
+        return "userProfile";
     }
 }

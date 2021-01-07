@@ -1,8 +1,9 @@
 package com.blog.controllers;
 
-import com.blog.Repositories.PostRepository;
-import com.blog.Repositories.TagRepository;
-import com.blog.Services.PostService;
+import com.blog.repositories.PostRepository;
+import com.blog.repositories.TagRepository;
+import com.blog.services.PostService;
+import com.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -18,12 +19,15 @@ public class PostController {
     private PostRepository postRepo;
     @Autowired
     private TagRepository tagRepo;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/")
     public String homePage(Model model) {
         model.addAttribute("posts", postService.findPublishedPosts());
         model.addAttribute("authors", postRepo.getDistinctByAuthor());
         model.addAttribute("tags", tagRepo.findDistinctByName());
+//        model.addAttribute("user",userRepo.findByUserName());
         return "home";
     }
 
@@ -35,7 +39,7 @@ public class PostController {
     @PostMapping("/create-post")
     public String createPost(@RequestParam("title") String title, @RequestParam("author") String author, @RequestParam("tags") String tags, @RequestParam("content") String content) {
         postService.createPost(title, author, tags, content);
-        return "home";
+        return "redirect:/";
     }
 
     @GetMapping("/publish-post")
@@ -105,5 +109,16 @@ public class PostController {
 //        model.addAttribute("tags", tagRepo.findDistinctByName());
 //        return "home";
 //    }
+
+    @RequestMapping("/register")
+    public String register() {
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("password") String password) {
+        userService.addUser(name, email, password);
+        return "home";
+    }
 
 }

@@ -54,10 +54,10 @@ welcome to viewBlog page..
 
 <div th:each="comment : ${post.comments}">
     <hr>
-    <span>
-        <p th:text="'Name: ' + ${comment.name}">name</span>
-    <p th:text="'Email: ' + ${comment.email}">email</p>
-    <p th:text="'Comment: ' + ${comment.comment}">comment</p>
+    <p>
+        <span th:text="${comment.name}">name</span>
+        <a th:href="@{/user/{email}(email=${comment.email})}"><span th:text="'[' + ${comment.email} + ']'" >email</span></a>
+    <p th:text="${comment.comment}">comment</p>
 
     </span>
     <nav sec:authorize="isAuthenticated()">

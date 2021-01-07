@@ -1,7 +1,7 @@
 package com.blog.controllers;
 
-import com.blog.Services.CommentService;
-import com.blog.Services.PostService;
+import com.blog.services.CommentService;
+import com.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/home.css" type="text/css" th:href="@{/home.css}">
+    <title>user-profile</title>
+</head>
+<p>
+
+<!--    <p th:text="${user}"></p>-->
+    <h1> User Profile </h1>
+    Name: <span th:text="${user.name}">name</span><br>
+<!--    Username: <span th:text="user.userName">userName</span>-->
+    Email: <span th:text="${user.email}">email</span>
+
+    <h2> Published Posts:</h2>
+    <span th:each="post : ${posts}"></span>
+    <article>
+        <div class="posts" th:each="post : ${posts}">
+            <h2 th:text="${post.title}">Post Title</h2>
+            <i>Posted on</i>
+            <span th:text="${post.publishedAt}">12-Dec-2020</span><br>
+            <p>Author: <span th:text="${post.author}"></span><p>
+            <p>Tags: <span th:text="${post.tags}"></span></p>
+            <p><span th:text="${post.excerpt}"></span>..</p>
+
+            <form action="view-post" method="POST">
+                <input type="hidden" th:value="${post.id}" name="postId">
+                <input type="submit" value="Read more..">
+            </form>
+        </div>
+    </article>
+
+    <h2> Comments:</h2><hr>
+    <p th:text="${comments}"></p>
+    <div th:each="com : ${comments}">
+        <b>Commented </b><i th:text="${com.comment} + ' at ' + ${com.createdAt}">  </i>
+        <hr>
+    </div>
+</body>
+</html>

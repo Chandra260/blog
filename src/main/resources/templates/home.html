@@ -10,15 +10,24 @@
     <div>
         <span><img src="../static/logo.png" alt="blog-image"></span>
         <span class="header">Blog Application</span>
+        <nav style="text-align: right;">
+
+            <p><i>Logged in as:</i></p>
+            <span sec:authentication="name"></span>
+<!--            <form action="{user-profile}">-->
+<!--                <a th:href="@{/comment.email}"><span th:text="'[' + ${comment.email} + ']'" >email</span></a>-->
+            <span sec:authentication="authorities"></span>
+
+        </nav>
     </div>
     <br>
 
     <span><a class="headings" href="home.html" th:href="@{/}">Home</a></span>
-    <span sec:authorize="isAuthenticated()"><a class="headings" href="createPost.html" th:href="@{/create-post}">Create Post</a></span>
-    <span sec:authorize="isAuthenticated()"><a class="headings" href="publishPost.html" th:href="@{/publish-post}">Saved Post</a></span>
-    <span sec:authorize="hasRole('USER')"><a class="headings" href="userPost.html" th:href="@{/user-post}">My Posts</a></span>
+    <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/user/create-post}">Create Post</a></span>
+    <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/user/publish-post}">Saved Post</a></span>
+    <span sec:authorize="hasRole('USER')"><a class="headings" th:href="@{/user/my-post}">My Posts</a></span>
     <span sec:authorize="isAnonymous()"><a class="headings" th:href="@{/login}">Login</a></span>
-    <span sec:authorize="isAnonymous()"><a class="headings" href="register.html" th:href="@{/register}">Register</a></span>
+    <span sec:authorize="isAnonymous()"><a class="headings" th:href="@{/register}">Register</a></span>
     <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/logout}">Logout</a></span>
 </header>
 <br>
@@ -30,13 +39,6 @@
 <!--<div sec:authorize="isAuthenticated()">-->
 <!--    Text visible only to authenticated users.-->
 <!--</div>-->
-
-Authenticated username:
-<div sec:authentication="name"></div>
-Authenticated user roles:
-<div sec:authentication="authorities"></div>
-
-
 
 <nav><form action="sort" method="GET">
     <input type="submit" value="sortBy DateTime">
