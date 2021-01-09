@@ -6,26 +6,24 @@
     <title>Home Page</title>
 </head>
 <body>
-<header>
+<header th:fragment="mainHeader">
     <div>
         <span><img src="../static/logo.png" alt="blog-image"></span>
         <span class="header">Blog Application</span>
-        <nav style="text-align: right;">
-
+        <aside sec:authorize="isAuthenticated()" style="text-align: right;">
             <p><i>Logged in as:</i></p>
             <span sec:authentication="name"></span>
 <!--            <form action="{user-profile}">-->
 <!--                <a th:href="@{/comment.email}"><span th:text="'[' + ${comment.email} + ']'" >email</span></a>-->
             <span sec:authentication="authorities"></span>
-
-        </nav>
+        </aside>
     </div>
     <br>
 
     <span><a class="headings" href="home.html" th:href="@{/}">Home</a></span>
-    <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/user/create-post}">Create Post</a></span>
-    <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/user/publish-post}">Saved Post</a></span>
-    <span sec:authorize="hasRole('USER')"><a class="headings" th:href="@{/user/my-post}">My Posts</a></span>
+    <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/create-post}">Create Post</a></span>
+    <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/publish-post}">Publish Post</a></span>
+    <span sec:authorize="hasRole('USER')"><a class="headings" th:href="@{/my-post}">My Posts</a></span>
     <span sec:authorize="isAnonymous()"><a class="headings" th:href="@{/login}">Login</a></span>
     <span sec:authorize="isAnonymous()"><a class="headings" th:href="@{/register}">Register</a></span>
     <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/logout}">Logout</a></span>
@@ -81,8 +79,8 @@
         <p>Tags: <span th:text="${post.tags}"></span></p>
         <p><span th:text="${post.excerpt}"></span>..</p>
 
-        <form action="view-post" method="POST">
-            <input type="hidden" th:value="${post.id}" name="postId">
+        <form th:action="@{/view-post/{postId}(postId=${post.id})}">
+<!--            <input type="hidden" th:value="${post.id}" name="postId">-->
             <input type="submit" value="Read more..">
         </form>
     </div>

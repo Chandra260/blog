@@ -23,7 +23,7 @@ public class CommentService {
         commentRepo.deleteById(postId);
     }
 
-    public void createComment(String name, String email, String comment, int postId) {
+    public void addComment(String name, String email, String comment, int postId) {
         Comment newComment = new Comment();
         newComment.setName(name);
         newComment.setEmail(email);
@@ -52,11 +52,11 @@ public class CommentService {
     }
 
     public void updateCommentByCommentId(int commentId, String name, String email, String comment) {
-        Comment editComment = findCommentByCommentId(commentId);
-        editComment.setName(name);
-        editComment.setEmail(email);
-        editComment.setComment(comment);
-        editComment.setUpdatedAt(postService.getTime());
-        commentRepo.save(editComment);
+        Comment updateComment = findCommentByCommentId(commentId);
+        updateComment.setName(name);
+        updateComment.setEmail(email);
+        updateComment.setComment(comment);
+        updateComment.setUpdatedAt(postService.getTime());
+        commentRepo.save(updateComment);
     }
 }

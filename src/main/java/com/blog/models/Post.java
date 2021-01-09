@@ -6,6 +6,7 @@ import java.util.*;
 @Entity
 @Table(name = "Posts")
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -14,9 +15,9 @@ public class Post {
     private String content;
     private String author;
     private String publishedAt;
-    private boolean isPublished;
     private String createdAt;
     private String updatedAt;
+    private boolean isPublished;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
     @ManyToMany

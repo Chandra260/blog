@@ -6,10 +6,11 @@
     <link rel="stylesheet" href="../static/home.css" type="text/css" th:href="@{/home.css}">
     <title>user-profile</title>
 </head>
-<p>
+<body>
+<header th:replace="home::mainHeader"></header>
 
 <!--    <p th:text="${user}"></p>-->
-    <h1> User Profile </h1>
+    <h1> Profile </h1>
     Name: <span th:text="${user.name}">name</span><br>
 <!--    Username: <span th:text="user.userName">userName</span>-->
     Email: <span th:text="${user.email}">email</span>
@@ -25,17 +26,17 @@
             <p>Tags: <span th:text="${post.tags}"></span></p>
             <p><span th:text="${post.excerpt}"></span>..</p>
 
-            <form action="view-post" method="POST">
-                <input type="hidden" th:value="${post.id}" name="postId">
+            <form th:action="@{/view-post/{postId}(postId=${post.id})}">
+<!--                <input type="hidden" th:value="${post.id}" name="postId">-->
                 <input type="submit" value="Read more..">
             </form>
         </div>
     </article>
 
-    <h2> All Comments:</h2><hr>
+    <h2> Comments:</h2><hr>
 <!--    <p th:text="${comments}"></p>-->
     <div th:each="com : ${comments}">
-        <b>Commented </b><i th:text="${com.comment} + ' at ' + ${com.createdAt}">  </i>
+        <i th:text="${com.createdAt} + ' | ' + ${com.comment} + ' | ' + ${com.post.title}">  </i>
         <hr>
     </div>
 </body>

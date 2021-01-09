@@ -57,7 +57,7 @@ public class PostService {
     }
 
     public String getTime() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyy HH:mm:ss");
         Date date = new Date();
         return dateFormat.format(date);
     }
@@ -73,11 +73,12 @@ public class PostService {
 
     public void createPost(String title, String author, String tags, String content) {
         Post post = new Post();
-        List<Tag> listOfTags = new ArrayList<>();
+        List<Tag> tagsList = new ArrayList<>();
         String[] tagsArray = tags.split(",");
-        for (int tag = 0; tag < tagsArray.length; tag++) {
-            listOfTags.add(tagService.findTagByName(tagsArray[tag]));
+        for (String tag : tagsArray) {
+            tagsList.add(tagService.findTagByName(tag));
         }
+        
         if (author.endsWith("@gmail.com")) {
             User user = userRepo.findByUserName(author);
             post.setUser(user);
@@ -86,9 +87,9 @@ public class PostService {
             post.setAuthor(author);
         }
 
-        post.setTags(listOfTags);
+        post.setTags(tagsList);
         post.setTitle(title);
-        post.setExcerpt(content.substring(0, 10));
+        post.setExcerpt(content.substring(0, Math.min(content.length(), 10)));
         post.setContent(content);
         post.setCreatedAt(getTime());
         post.setPublished(false);
@@ -104,12 +105,12 @@ public class PostService {
 
     public void updatePostById(int postId, String title, String author, String tags, String content) {
         Post post = findPostById(postId);
-        List<Tag> listOfTags = new ArrayList<>();
+        List<Tag> tagsList = new ArrayList<>();
         String[] tagsArray = tags.split(",");
-        for (int tag = 0; tag < tagsArray.length; tag++) {
-            listOfTags.add(tagService.findTagByName(tagsArray[tag]));
+        for (String tag : tagsArray) {
+            tagsList.add(tagService.findTagByName(tag));
         }
-        post.setTags(listOfTags);
+        post.setTags(tagsList);
         post.setTitle(title);
         post.setExcerpt(content.substring(0, 10));
         post.setContent(content);
@@ -163,4 +164,5 @@ public class PostService {
 //        Page<Post> pagedResult = postRepo.findAll(paging);
 //        return pagedResult.toList();
 //    }
+
 }

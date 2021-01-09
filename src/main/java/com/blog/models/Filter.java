@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Filter {
+
     String author;
     String tags;
     String dateTime;

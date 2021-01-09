@@ -1,10 +1,12 @@
 package com.blog.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "comments")
 public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -13,6 +15,30 @@ public class Comment {
     private String comment;
     private String createdAt;
     private String updatedAt;
+    @ManyToOne
+    private Post post;
+    @ManyToOne
+    private User user;
+    @ManyToOne
+    private Comment parentComment;
+    @OneToMany
+    private List<Comment> childComment;
+
+    public Comment getParentComment() {
+        return parentComment;
+    }
+
+    public void setParentComment(Comment parentComment) {
+        this.parentComment = parentComment;
+    }
+
+    public List<Comment> getChildComment() {
+        return childComment;
+    }
+
+    public void setChildComment(List<Comment> childComment) {
+        this.childComment = childComment;
+    }
 
     @Override
     public String toString() {
@@ -21,11 +47,6 @@ public class Comment {
                 ", createdAt='" + createdAt + '\'' +
                 '}';
     }
-
-    @ManyToOne
-    private Post post;
-    @ManyToOne
-    private User user;
 
     public User getUser() {
         return user;

@@ -1,8 +1,10 @@
 package com.blog.controllers;
 
+import com.blog.models.User;
 import com.blog.repositories.UserRepository;
 import com.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,19 +36,18 @@ public class UserController extends PostController {
 //        return redirectView;
 //    }
 
-    @RequestMapping("/my-post")
-    public String userPosts(Principal principal, Model model) {
-        model.addAttribute("posts", userService.postsByUser(principal));
-        return "myPost";
-    }
-
     @RequestMapping("/{email}")
     public String userProfile(@PathVariable String email, Model model) {
-//        System.out.println(email);
+        System.out.println(email);
+        User user = userRepo.findByUserName(email);
+        if(user==null) {
+            return "errorPage";
+        }
         model.addAttribute("user",userRepo.findByUserName(email));
         model.addAttribute("posts", userService.postsByUser(email));
         model.addAttribute("comments", userRepo.findAllCommentsByUserEmail(email));
         System.out.println(userRepo.findAllCommentsByUserEmail(email));
         return "userProfile";
     }
+
 }

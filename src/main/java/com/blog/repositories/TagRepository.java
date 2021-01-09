@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Integer> {
+
     @Query("select distinct tag.name from Tag tag order by tag.name asc")
     public List<String> findDistinctByName();
 

@@ -7,8 +7,8 @@
     <title>Title</title>
 </head>
 <body>
-
-<h1>My Published Posts:</h1>
+<header th:replace="home::mainHeader"></header>
+<h1>My Posts:</h1>
 <span th:each="post : ${posts}"></span>
 <article>
     <div class="posts" th:each="post : ${posts}">
@@ -20,8 +20,8 @@
         <p>Tags: <span th:text="${post.tags}"></span></p>
         <p><span th:text="${post.excerpt}"></span>..</p>
 
-        <form action="view-post" method="POST">
-            <input type="hidden" th:value="${post.id}" name="postId">
+        <form th:action="@{/view-post/{postId}(postId=${post.id})}">
+<!--            <input type="hidden" th:value="${post.id}" name="postId">-->
             <input type="submit" value="Read more..">
         </form>
     </div>

@@ -7,7 +7,8 @@
     <title>View Blog</title>
 </head>
 <body>
-welcome to viewBlog page..
+<header th:replace="home::mainHeader"></header>
+
 <!--    <h1 th:text="${post}"></h1>-->
 <article>
     <h2 th:text="${post.title}">Post Title</h2>
@@ -22,33 +23,33 @@ welcome to viewBlog page..
 
     <nav>
         <aside sec:authorize="isAuthenticated()">
-            <form action="edit-post" method="GET">
+            <form th:action="@{/edit-post}" method="GET">
                 <input type="hidden" th:value="${post.id}" name="postId">
                 <input class="button" type="submit" value="edit">
             </form>
         </aside>
         <aside sec:authorize="isAuthenticated()">
-            <form action="delete-post" method="POST">
-                <input type="hidden" th:value="${post.id}" name="postId">
+            <form th:action="@{/delete-post/{postId}(postId=${post.id})}" method="POST">
+<!--                <input type="hidden" th:value="${post.id}" name="postId">-->
                 <input class="button" type="submit" value="delete">
             </form>
         </aside>
         <aside sec:authorize="isAuthenticated()">
-        <form action="comment/new-comment" method="POST">
+        <form th:action="@{/view-post/{postId}/new-comment(postId=${post.id})}" method="POST">
             <!--    <span><a href="comment.html" th:href="@{/createComment}"><input type="submit" value="Comment"></a></span>-->
-            <input type="hidden" th:value="${post.id}" name="postId">
+<!--            <input type="hidden" th:value="${post.id}" name="postId">-->
             <input class="button" type="submit" value="New comment">
         </form>
         </aside>
         <aside sec:authorize="isAnonymous()">
-            <form action="comment/new-comment" method="POST">
+            <form th:action="@{/view-post/{postId}/new-comment(postId=${post.id})}" method="POST">
                 <!--    <span><a href="comment.html" th:href="@{/createComment}"><input type="submit" value="Comment"></a></span>-->
-                <input type="hidden" th:value="${post.id}" name="postId">
+<!--                <input type="hidden" th:value="${post.id}" name="postId">-->
                 <input class="button" type="submit" value="New comment">
             </form>
         </aside>
     </nav>
-</article>
+
 <br>
 <h1>Comments: </h1>
 
@@ -59,21 +60,28 @@ welcome to viewBlog page..
         <a th:href="@{/user/{email}(email=${comment.email})}"><span th:text="'[' + ${comment.email} + ']'" >email</span></a>
     <p th:text="${comment.comment}">comment</p>
 
-    </span>
     <nav sec:authorize="isAuthenticated()">
     <span>
-        <form action="comment/edit-comment">
+        <form th:action="@{/{postId}/edit-comment(postId=${post.id})}">
             <input class="button" type="submit" value="Edit Comment">
             <input type="hidden" th:value="${comment.id}" name="commentId">
         </form>
     </span>
 
-        <span>
-        <form action="comment/delete-comment" method="POST">
+    <span>
+        <form th:action="@{/view-post/{postId}/delete-comment(postId=${post.id})}" method="POST">
             <input class="button" type="submit" value="Delete Comment">
-            <input type="hidden" th:value="${comment.id}" name="postId">
+            <input type="hidden" th:value="${comment.id}" name="commentId">
         </form>
     </span>
+
+    <span>
+        <form th:action="@{/view-post/{postId}/reply(postId=${post.id})}" method="POST">
+            <input class="button" type="submit" value="Reply">
+            <input type="hidden" th:value="${comment.id}" name="commentId">
+        </form>
+    </span>
+
     </nav>
 </div>
 

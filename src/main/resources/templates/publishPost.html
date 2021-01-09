@@ -6,7 +6,8 @@
     <title>Publish Posts</title>
 </head>
 <body>
-<div th:each="post : ${posts}">
+<header th:replace="home::mainHeader"></header>
+<article th:each="post : ${posts}">
     <h2 th:text="${post.title}">Post Title</h2>
     <i>Created on</i>
     <span th:text="${post.createdAt}"></span>
@@ -15,10 +16,10 @@
     <p>Tags: <span th:text="${post.tags}"></span></p>
     <p><span th:text="${post.excerpt}"></span></p>
 
-    <form th:action="publish-post" method="POST">
-        <input type="hidden" th:value="${post.id}" name="postId">
+    <form th:action="@{/publish-post/{postId}(postId=${post.id})}" method="POST">
+<!--        <input type="hidden" th:value="${post.id}" name="postId">-->
         <input class="button" type="submit" value="Publish">
     </form>
-</div>
+</article>
 </body>
 </html>

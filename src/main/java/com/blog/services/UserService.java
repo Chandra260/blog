@@ -31,12 +31,10 @@ public class UserService implements UserDetailsService {
         return new MyUserDetails(user);
     }
 
-    public void addUser(String name, String email, String password) {
-        User user = new User();
-        user.setName(name);
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
+    public void addUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("ROLE_USER");
+        System.out.println(user);
         userRepo.save(user);
     }
 
@@ -50,5 +48,4 @@ public class UserService implements UserDetailsService {
         List<Post> posts = userRepo.findAllPostsByUserEmail(email);
         return posts;
     }
-
 }

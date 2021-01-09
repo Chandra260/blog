@@ -1,12 +1,11 @@
 
-body {
-    background: #fff;
-    padding: 2em 4em 2em;
-    max-width: 90%;
-    border: 1px solid black;
-    border-radius: 2px;
-
-}
+/*body {*/
+/*    background: #fff;*/
+/*    padding: 2em 4em 2em;*/
+/*    max-width: 90%;*/
+/*    border: 1px solid black;*/
+/*    border-radius: 2px;*/
+/*}*/
 
 input {
     display: block;
@@ -24,11 +23,31 @@ input {
 }
 
 article {
-    border: 2px solid black;
+    margin-top: 5%;
+    border: 1px solid black;
     padding: 5%;
 }
 
 nav  {
     display: flex;
     justify-content: space-around;
+}
+
+
+header{
+    border: 2px solid black;
+}
+
+.headings, .foot {
+    margin: 3%;
+    font-size: 20px;
+}
+
+.header{
+    font-size: 40px;
+}
+
+img {
+    margin-left: 30px;
+    width: 10%;
 }
