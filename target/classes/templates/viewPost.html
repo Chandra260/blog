@@ -55,10 +55,9 @@
 
 <div th:each="comment : ${post.comments}">
     <hr>
-    <p>
         <span th:text="${comment.name}">name</span>
         <a th:href="@{/user/{email}(email=${comment.email})}"><span th:text="'[' + ${comment.email} + ']'" >email</span></a>
-    <p th:text="${comment.comment}">comment</p>
+        <p th:text="${comment.comment}">comment</p>
 
     <nav sec:authorize="isAuthenticated()">
     <span>
@@ -83,6 +82,45 @@
     </span>
 
     </nav>
+
+
+<!--    Nested Comment-->
+    <h6 style="padding-left: 2%;" th:if="${comment.childComment}">
+<!--        <i th:text="${comment.childComment}"></i>-->
+        <i th:each="com : ${comment.childComment}">
+            <span th:text="${com.name}"></span>
+            <a th:href="@{/user/{email}(email=${com.email})}"><span th:text="'[' + ${com.email} + ']'" >email</span></a>
+<!--            <p th:text="${com.email}"></p>-->
+            <p th:text="${com.comment}"></p>
+
+            <nav sec:authorize="isAuthenticated()">
+                <span>
+                    <form th:action="@{/{postId}/edit-comment(postId=${post.id})}">
+                        <input class="button" type="submit" value="Edit Comment">
+                        <input type="hidden" th:value="${comment.id}" name="commentId">
+                    </form>
+                </span>
+
+                <span>
+                    <form th:action="@{/view-post/{postId}/delete-comment(postId=${post.id})}" method="POST">
+                        <input class="button" type="submit" value="Delete Comment">
+                        <input type="hidden" th:value="${comment.id}" name="commentId">
+                    </form>
+                </span>
+
+                <span>
+                    <form th:action="@{/view-post/{postId}/reply(postId=${post.id})}" method="POST">
+                        <input class="button" type="submit" value="Reply">
+                        <input type="hidden" th:value="${comment.id}" name="commentId">
+                    </form>
+                </span>
+
+            </nav>
+
+        </i>
+
+    </h6>
+
 </div>
 
 </article>

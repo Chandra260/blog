@@ -33,7 +33,7 @@ public class PostService {
     }
 
     public List<Post> findPublishedPosts() {
-        filter.setAuthor(String.join(",", postRepo.getDistinctByAuthor()));
+        filter.setAuthor(String.join(",", postRepo.findDistinctByAuthor()));
         filter.setTags(String.join(",", tagRepo.findDistinctByName()));
         List<Post> allPosts = findAllPosts();
         ArrayList<Post> publishedPosts = new ArrayList<Post>();

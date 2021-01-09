@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/home.css" type="text/css" th:href="@{/formsCss.css}">
+    <title>Add Nested Comment</title>
+</head>
+<body>
+
+<header th:replace="home::mainHeader"></header>
+
+<form action="nested-comment" method="POST">
+    <h1>New Comment</h1>
+    <input type="hidden" name="commentId" th:value="${commentId}"><br>
+    <input type="text" name="name" placeholder="Name" required><br>
+    <input type="text" name="email" placeholder="Email" pattern=".+@gmail.com$" required><br>
+    <input type="text" name="comment" placeholder="Comment" required><br>
+    <input class="button" type="submit" value="Comment">
+</form>
+</body>
+</html>

@@ -21,7 +21,7 @@ public class Comment {
     private User user;
     @ManyToOne
     private Comment parentComment;
-    @OneToMany
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
     private List<Comment> childComment;
 
     public Comment getParentComment() {

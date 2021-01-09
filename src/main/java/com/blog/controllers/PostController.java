@@ -31,7 +31,7 @@ public class PostController {
     @RequestMapping("/")
     public String homePage(Model model) {
         model.addAttribute("posts", postService.findPublishedPosts());
-        model.addAttribute("authors", postRepo.getDistinctByAuthor());
+        model.addAttribute("authors", postRepo.findDistinctByAuthor());
         model.addAttribute("tags", tagRepo.findDistinctByName());
 //        model.addAttribute("user",userRepo.findByUserName());
         return "home";
@@ -88,7 +88,7 @@ public class PostController {
     @GetMapping("/sort")
     public String sortByPublishedTimeDate(Model model) {
         model.addAttribute("posts", postService.getSortedPostsByPublishedDate());
-        model.addAttribute("authors", postRepo.getDistinctByAuthor());
+        model.addAttribute("authors", postRepo.findDistinctByAuthor());
         model.addAttribute("tags", tagRepo.findDistinctByName());
         return "home";
     }
@@ -96,7 +96,7 @@ public class PostController {
     @RequestMapping("/search-post")
     public String searchPosts(@RequestParam("search") String searchKeyword, Model model) {
         model.addAttribute("posts", postService.getPostsBySearchKeyword(searchKeyword));
-        model.addAttribute("authors", postRepo.getDistinctByAuthor());
+        model.addAttribute("authors", postRepo.findDistinctByAuthor());
         model.addAttribute("tags", tagRepo.findDistinctByName());
         return "home";
     }
@@ -104,7 +104,7 @@ public class PostController {
     @RequestMapping("/filter")
     public String filterByUserKeywords(@Param("author") String author, @Param("tags") String tags, @Param("dateTime") String dateTime, Model model) {
         model.addAttribute("posts", postService.findFilterBy(author, tags, dateTime));
-        model.addAttribute("authors", postRepo.getDistinctByAuthor());
+        model.addAttribute("authors", postRepo.findDistinctByAuthor());
         model.addAttribute("tags", tagRepo.findDistinctByName());
         return "home";
     }

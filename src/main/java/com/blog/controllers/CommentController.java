@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/view-post/{postId}")
 public class CommentController {
@@ -53,6 +55,26 @@ public class CommentController {
     @PostMapping("/reply")
     public String replyComment(@RequestParam("commentId") int commentId, @PathVariable int postId, Model model) {
         model.addAttribute("commentId",commentId);
-        return null;
+        return "nestedComment";
     }
+
+    @PostMapping("/nested-comment")
+    public String nestedComment(@RequestParam("commentId") int commentId, @RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("comment") String message, @PathVariable int postId, Model model) {
+        Comment nestedComment = new Comment();
+        Comment comment = commentRepo.findById(commentId);
+        nestedComment.setParentComment(comment);
+        nestedComment.setName(name);
+        nestedComment.setEmail(email);
+        nestedComment.setComment(message);
+        nestedComment.setPost(comment.getPost());
+        nestedComment.setCreatedAt(postService.getTime());
+        Comment savedComment = commentRepo.save(nestedComment);
+        List<Comment> list = commentRepo.findByParentComment(comment);
+        System.out.println(list);
+        comment.setChildComment(commentRepo.findByParentComment(comment));
+        commentRepo.save(comment);
+        return "redirect:/view-post/{postId}";
+    }
+
+
 }

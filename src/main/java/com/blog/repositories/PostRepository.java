@@ -17,8 +17,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     public List<Post> findAllPublishedPosts(List author, List tags, List dateTime, String searchKeyword);
 
     @Query("select distinct author from Post order by author asc")
-    public List<String> getDistinctByAuthor();
-
+    public List<String> findDistinctByAuthor();
 
 //    public Page<Post> findAll(Pageable pageable);
 
