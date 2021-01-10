@@ -16,8 +16,8 @@
     <input type="text" name="name" placeholder="Enter name" th:value="${user.name}" required><br>
     <label>Email:</label><br>
     <input type="text" name="email" placeholder="Enter email" pattern=".+@gmail.com$" th:value="${user.email}" required><br>
-    <!--    <label>userName:</label><br>-->
-    <!--    <input type="text" name="userName" placeholder="Enter userName" required><br>-->
+        <label>userName:</label><br>
+        <input type="text" name="userName" th:value="${user.userName}" placeholder="Enter userName" required><br>
     <label>Password:</label><br>
     <input type="password" name="password" placeholder="Create password" required><br>
     <input class="button" type="submit" value="Register">

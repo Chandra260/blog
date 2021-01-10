@@ -17,7 +17,7 @@ public class TagService {
     TagRepository tagRepo;
 
     public String getTime() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyy HH:mm:ss");
         Date date = new Date();
         return dateFormat.format(date);
     }

@@ -23,7 +23,7 @@
 
     <nav>
         <aside sec:authorize="isAuthenticated()">
-            <form th:action="@{/edit-post}" method="GET">
+            <form th:action="@{/edit-post-form}" method="GET">
                 <input type="hidden" th:value="${post.id}" name="postId">
                 <input class="button" type="submit" value="edit">
             </form>
@@ -35,18 +35,11 @@
             </form>
         </aside>
         <aside sec:authorize="isAuthenticated()">
-        <form th:action="@{/view-post/{postId}/new-comment(postId=${post.id})}" method="POST">
-            <!--    <span><a href="comment.html" th:href="@{/createComment}"><input type="submit" value="Comment"></a></span>-->
+        <form th:action="@{/view-post/{postId}/new-comment-form(postId=${post.id})}" method="POST">
+            <!--    <span><a href="createCommentForm.html" th:href="@{/createComment}"><input type="submit" value="Comment"></a></span>-->
 <!--            <input type="hidden" th:value="${post.id}" name="postId">-->
             <input class="button" type="submit" value="New comment">
         </form>
-        </aside>
-        <aside sec:authorize="isAnonymous()">
-            <form th:action="@{/view-post/{postId}/new-comment(postId=${post.id})}" method="POST">
-                <!--    <span><a href="comment.html" th:href="@{/createComment}"><input type="submit" value="Comment"></a></span>-->
-<!--                <input type="hidden" th:value="${post.id}" name="postId">-->
-                <input class="button" type="submit" value="New comment">
-            </form>
         </aside>
     </nav>
 
@@ -55,13 +48,13 @@
 
 <div th:each="comment : ${post.comments}">
     <hr>
-        <span th:text="${comment.name}">name</span>
-        <a th:href="@{/user/{email}(email=${comment.email})}"><span th:text="'[' + ${comment.email} + ']'" >email</span></a>
-        <p th:text="${comment.comment}">comment</p>
+        <a th:href="@{/user/{userName}(userName=${comment.user.userName})}"><span th:text="${comment.name}">name</span></a>
+        <span th:text="'[' + ${comment.email} + ']'" >email</span>
+        <p th:text="${comment.message}">comment</p>
 
     <nav sec:authorize="isAuthenticated()">
     <span>
-        <form th:action="@{/{postId}/edit-comment(postId=${post.id})}">
+        <form th:action="@{/view-post/{postId}/edit-comment-form(postId=${post.id})}">
             <input class="button" type="submit" value="Edit Comment">
             <input type="hidden" th:value="${comment.id}" name="commentId">
         </form>
@@ -85,41 +78,15 @@
 
 
 <!--    Nested Comment-->
-    <h6 style="padding-left: 2%;" th:if="${comment.childComment}">
+<!--    <h6 style="padding-left: 2%;" th:if="${comment.childComment}">-->
 <!--        <i th:text="${comment.childComment}"></i>-->
-        <i th:each="com : ${comment.childComment}">
-            <span th:text="${com.name}"></span>
-            <a th:href="@{/user/{email}(email=${com.email})}"><span th:text="'[' + ${com.email} + ']'" >email</span></a>
+<!--        <i th:each="com : ${comment.childComment}">-->
+<!--            <span th:text="${com.name}"></span>-->
+<!--            <a th:href="@{/user/{email}(email=${com.email})}"><span th:text="'[' + ${com.email} + ']'" >email</span></a>-->
 <!--            <p th:text="${com.email}"></p>-->
-            <p th:text="${com.comment}"></p>
-
-            <nav sec:authorize="isAuthenticated()">
-                <span>
-                    <form th:action="@{/{postId}/edit-comment(postId=${post.id})}">
-                        <input class="button" type="submit" value="Edit Comment">
-                        <input type="hidden" th:value="${comment.id}" name="commentId">
-                    </form>
-                </span>
-
-                <span>
-                    <form th:action="@{/view-post/{postId}/delete-comment(postId=${post.id})}" method="POST">
-                        <input class="button" type="submit" value="Delete Comment">
-                        <input type="hidden" th:value="${comment.id}" name="commentId">
-                    </form>
-                </span>
-
-                <span>
-                    <form th:action="@{/view-post/{postId}/reply(postId=${post.id})}" method="POST">
-                        <input class="button" type="submit" value="Reply">
-                        <input type="hidden" th:value="${comment.id}" name="commentId">
-                    </form>
-                </span>
-
-            </nav>
-
-        </i>
-
-    </h6>
+<!--            <p th:text="${com.message}"></p>-->
+<!--        </i>-->
+<!--    </h6>-->
 
 </div>
 

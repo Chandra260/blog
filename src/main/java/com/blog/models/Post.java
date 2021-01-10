@@ -57,12 +57,12 @@ public class Post {
         this.createdAt = createdAt;
     }
 
-    public Post(String title, String excerpt, String author, String publishedAt) {
-        this.title = title;
-        this.excerpt = excerpt;
-        this.author = author;
-        this.publishedAt = publishedAt;
-    }
+//    public Post(String title, String excerpt, String author, String publishedAt) {
+//        this.title = title;
+//        this.excerpt = excerpt;
+//        this.author = author;
+//        this.publishedAt = publishedAt;
+//    }
 
     public int getId() {
         return id;

@@ -11,18 +11,18 @@
         <span><img src="../static/logo.png" alt="blog-image"></span>
         <span class="header">Blog Application</span>
         <aside sec:authorize="isAuthenticated()" style="text-align: right;">
-            <p><i>Logged in as:</i></p>
-            <span sec:authentication="name"></span>
+            Welcome <i><span sec:authentication="name"></span></i>
 <!--            <form action="{user-profile}">-->
 <!--                <a th:href="@{/comment.email}"><span th:text="'[' + ${comment.email} + ']'" >email</span></a>-->
-            <span sec:authentication="authorities"></span>
+<!--            <span sec:authentication="authorities"></span>-->
         </aside>
     </div>
     <br>
 
     <span><a class="headings" href="home.html" th:href="@{/}">Home</a></span>
-    <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/create-post}">Create Post</a></span>
+    <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/create-post-form}">Create Post</a></span>
     <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/publish-post}">Publish Post</a></span>
+    <span sec:authorize="hasRole('ADMIN')"><a class="headings" th:href="@{/create-tag}">Create Tag</a></span>
     <span sec:authorize="hasRole('USER')"><a class="headings" th:href="@{/my-post}">My Posts</a></span>
     <span sec:authorize="isAnonymous()"><a class="headings" th:href="@{/login}">Login</a></span>
     <span sec:authorize="isAnonymous()"><a class="headings" th:href="@{/register}">Register</a></span>

@@ -12,7 +12,7 @@ public class Comment {
     private int id;
     private String name;
     private String email;
-    private String comment;
+    private String message;
     private String createdAt;
     private String updatedAt;
     @ManyToOne
@@ -23,6 +23,18 @@ public class Comment {
     private Comment parentComment;
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
     private List<Comment> childComment;
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", comment='" + message + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                '}';
+    }
 
     public Comment getParentComment() {
         return parentComment;
@@ -38,14 +50,6 @@ public class Comment {
 
     public void setChildComment(List<Comment> childComment) {
         this.childComment = childComment;
-    }
-
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "comment='" + comment + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                '}';
     }
 
     public User getUser() {
@@ -88,12 +92,12 @@ public class Comment {
         this.email = email;
     }
 
-    public String getComment() {
-        return comment;
+    public String getMessage() {
+        return message;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setMessage(String comment) {
+        this.message = comment;
     }
 
     public String getCreatedAt() {
@@ -111,5 +115,4 @@ public class Comment {
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
-
 }

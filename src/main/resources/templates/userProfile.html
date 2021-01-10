@@ -12,7 +12,7 @@
 <!--    <p th:text="${user}"></p>-->
     <h1> Profile </h1>
     Name: <span th:text="${user.name}">name</span><br>
-<!--    Username: <span th:text="user.userName">userName</span>-->
+    Username: <span th:text="${user.userName}">userName</span><br>
     Email: <span th:text="${user.email}">email</span>
 
     <h2> Published Posts:</h2>
@@ -36,7 +36,7 @@
     <h2> Comments:</h2><hr>
 <!--    <p th:text="${comments}"></p>-->
     <div th:each="com : ${comments}">
-        <i th:text="${com.createdAt} + ' | ' + ${com.comment} + ' | ' + ${com.post.title}">  </i>
+        <i th:text="${com.createdAt} + ' | ' + ${com.message} + ' | ' + ${com.post.title}">  </i>
         <hr>
     </div>
 </body>

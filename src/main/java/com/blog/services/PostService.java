@@ -10,6 +10,7 @@ import com.blog.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -20,22 +21,21 @@ public class PostService {
     @Autowired
     private PostRepository postRepo;
     @Autowired
-    private TagService tagService;
-    @Autowired
     private TagRepository tagRepo;
     @Autowired
     private UserRepository userRepo;
 
     Filter filter = new Filter();
 
-    public List<Post> findAllPosts() {
+
+    public List<Post> getAllPosts() {
         return (List<Post>) postRepo.findAll();
     }
 
-    public List<Post> findPublishedPosts() {
+    public List<Post> getPublishedPosts() {
         filter.setAuthor(String.join(",", postRepo.findDistinctByAuthor()));
         filter.setTags(String.join(",", tagRepo.findDistinctByName()));
-        List<Post> allPosts = findAllPosts();
+        List<Post> allPosts = getAllPosts();
         ArrayList<Post> publishedPosts = new ArrayList<Post>();
         for (Post post : allPosts) {
             if (post.isPublished()) {
@@ -45,8 +45,8 @@ public class PostService {
         return publishedPosts;
     }
 
-    public List<Post> findUnpublishedPosts() {
-        List<Post> allPosts = findAllPosts();
+    public List<Post> getUnpublishedPosts() {
+        List<Post> allPosts = postRepo.findAll();
         ArrayList<Post> unpublishedPosts = new ArrayList<Post>();
         for (Post post : allPosts) {
             if (!post.isPublished()) {
@@ -62,7 +62,7 @@ public class PostService {
         return dateFormat.format(date);
     }
 
-    public Post findPostById(int postId) {
+    public Post getPostById(int postId) {
         List<Post> posts = (List<Post>) postRepo.findAll();
         for (Post post : posts) {
             if (post.getId() == postId)
@@ -71,52 +71,50 @@ public class PostService {
         return null;
     }
 
-    public void createPost(String title, String author, String tags, String content) {
-        Post post = new Post();
+    public void addPost(Post newPost, String tags, Principal principal) {
         List<Tag> tagsList = new ArrayList<>();
         String[] tagsArray = tags.split(",");
         for (String tag : tagsArray) {
-            tagsList.add(tagService.findTagByName(tag));
+            tagsList.add(tagRepo.findTagByName(tag));
         }
-        
-        if (author.endsWith("@gmail.com")) {
-            User user = userRepo.findByUserName(author);
-            post.setUser(user);
-            post.setAuthor(user.getName());
+        newPost.setTags(tagsList);
+        newPost.setExcerpt(newPost.getContent().substring(0, Math.min(newPost.getContent().length(), 50)));
+        newPost.setCreatedAt(getTime());
+        newPost.setPublished(false);
+        if(newPost.getAuthor().equals(principal.getName())) {
+            newPost.setAuthor(userRepo.findUserByUserName(principal.getName()).getName());
+            newPost.setUser(userRepo.findUserByUserName(principal.getName()));
         } else {
-            post.setAuthor(author);
+            newPost.setAuthor(newPost.getAuthor());
         }
-
-        post.setTags(tagsList);
-        post.setTitle(title);
-        post.setExcerpt(content.substring(0, Math.min(content.length(), 10)));
-        post.setContent(content);
-        post.setCreatedAt(getTime());
-        post.setPublished(false);
-        postRepo.save(post);
+        postRepo.save(newPost);
     }
 
     public void publishPost(int postId) {
-        Post post = findPostById(postId);
+        Post post = getPostById(postId);
         post.setPublishedAt(getTime());
         post.setPublished(true);
         postRepo.save(post);
     }
 
-    public void updatePostById(int postId, String title, String author, String tags, String content) {
-        Post post = findPostById(postId);
+    public void updatePost(Post post, String tags) {
         List<Tag> tagsList = new ArrayList<>();
         String[] tagsArray = tags.split(",");
         for (String tag : tagsArray) {
-            tagsList.add(tagService.findTagByName(tag));
+            tagsList.add(tagRepo.findTagByName(tag));
         }
-        post.setTags(tagsList);
-        post.setTitle(title);
-        post.setExcerpt(content.substring(0, 10));
-        post.setContent(content);
-        post.setAuthor(author);
-        post.setUpdatedAt(getTime());
-        postRepo.save(post);
+
+        Post updatedPost = getPostById(post.getId());
+//        Optional<Post> postDb = postRepo.findPostById(post.getId());
+//        Post updatedPost = postDb.get();
+        System.out.println(updatedPost);
+        updatedPost.setTags(tagsList);
+        updatedPost.setTitle(post.getTitle());
+        updatedPost.setAuthor(post.getAuthor());
+        updatedPost.setContent(post.getContent());
+        updatedPost.setUpdatedAt(getTime());
+        updatedPost.setExcerpt(updatedPost.getContent().substring(0, Math.min(updatedPost.getContent().length(), 50)));
+        postRepo.save(updatedPost);
     }
 
     public void deletePostById(int id) {
@@ -124,7 +122,7 @@ public class PostService {
     }
 
     public List<Post> getSortedPostsByPublishedDate() {
-        List<Post> sortedPosts = findPublishedPosts();
+        List<Post> sortedPosts = getPublishedPosts();
         Collections.sort(sortedPosts, new Comparator<Post>() {
             public int compare(Post post1, Post post2) {
                 return post2.getPublishedAt().compareTo(post1.getPublishedAt());
@@ -141,7 +139,7 @@ public class PostService {
         return postRepo.findAllPublishedPosts(Arrays.asList(authorsArray), Arrays.asList(tagsArray), Arrays.asList(dateTimeArray), filter.getSearch());
     }
 
-    public List<Post> findFilterBy(String author, String tags, String dateTime) {
+    public List<Post> getFilterBy(String author, String tags, String dateTime) {
         if (author != null) {
             filter.initializeAuthor();
         }
@@ -164,5 +162,9 @@ public class PostService {
 //        Page<Post> pagedResult = postRepo.findAll(paging);
 //        return pagedResult.toList();
 //    }
+
+    public List<Post> getPostsByUser(User user) {
+        return postRepo.findPostsByUser(user);
+    }
 
 }

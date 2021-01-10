@@ -15,7 +15,7 @@ public class User {
     private String name;
     @Column(unique=true)
     private String email;
-//    private String userName;
+    private String userName;
     private String password;
     private String role;
     @OneToMany(mappedBy = "user", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
@@ -29,6 +29,7 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
                 '}';
@@ -37,13 +38,13 @@ public class User {
     public User() {
     }
 
-//    public String getUserName() {
-//        return userName;
-//    }
-//
-//    public void setUserName(String userName) {
-//        this.userName = userName;
-//    }
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public int getId() {
         return id;

@@ -1,10 +1,12 @@
 package com.blog.controllers;
 
+import com.blog.models.Post;
 import com.blog.models.User;
 import com.blog.repositories.PostRepository;
 import com.blog.repositories.TagRepository;
 import com.blog.repositories.UserRepository;
 import com.blog.services.PostService;
+import com.blog.services.TagService;
 import com.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -22,67 +24,68 @@ public class PostController {
     @Autowired
     private PostRepository postRepo;
     @Autowired
+    private UserService userService;
+    @Autowired
     private TagRepository tagRepo;
     @Autowired
-    private UserService userService;
+    private TagService tagService;
     @Autowired
     private UserRepository userRepo;
 
     @RequestMapping("/")
     public String homePage(Model model) {
-        model.addAttribute("posts", postService.findPublishedPosts());
+        model.addAttribute("posts", postService.getPublishedPosts());
         model.addAttribute("authors", postRepo.findDistinctByAuthor());
         model.addAttribute("tags", tagRepo.findDistinctByName());
-//        model.addAttribute("user",userRepo.findByUserName());
         return "home";
     }
 
-    @RequestMapping("/create-post")
-    public String create() {
-        return "createPost";
+    @RequestMapping("/create-post-form")
+    public String create(Model model) {
+        model.addAttribute("post", new Post());
+        return "createPostForm";
     }
 
     @PostMapping("/create-post")
-    public String createPost(@RequestParam("title") String title, @RequestParam("author") String author, @RequestParam("tags") String tags, @RequestParam("content") String content) {
-        postService.createPost(title, author, tags, content);
+    public String createNewPost(@ModelAttribute Post post, @RequestParam("tag") String tags, Principal principal) {
+        postService.addPost(post, tags, principal);
         return "redirect:/";
     }
 
     @GetMapping("/publish-post")
     public String publish(Model model) {
-        model.addAttribute("posts", postService.findUnpublishedPosts());
+        model.addAttribute("posts", postService.getUnpublishedPosts());
         return "publishPost";
     }
 
     @PostMapping("/publish-post/{postId}")
     public String publishPost(@PathVariable int postId) {
-//        System.out.println(postId);
         postService.publishPost(postId);
         return "redirect:/publish-post";
     }
 
-    @PostMapping("/update-post")
-    public String updatePost(@RequestParam int postId, @RequestParam("title") String title, @RequestParam("author") String author, @RequestParam("tags") String tags, @RequestParam("content") String content) {
-        postService.updatePostById(postId, title, author, tags, content);
-        return "redirect:/";
-    }
-
     @RequestMapping("/view-post/{postId}")
     public String viewPost(@PathVariable int postId, Model model) {
-        model.addAttribute("post", postService.findPostById(postId));
+        model.addAttribute("post", postService.getPostById(postId));
         return "viewPost";
+    }
+
+    @GetMapping("/edit-post-form")
+    public String editPost(@RequestParam("postId") int postId, Model model) {
+        model.addAttribute("post", postService.getPostById(postId));
+        return "editPostForm";
+    }
+
+    @PostMapping("/update-post")
+    public String updatePost(@ModelAttribute Post post, @RequestParam("tag") String tags) {
+        postService.updatePost(post, tags);
+        return "redirect:/";
     }
 
     @PostMapping("/delete-post/{postId}")
     public String deletePost(@PathVariable int postId) {
         postService.deletePostById(postId);
         return "redirect:/";
-    }
-
-    @GetMapping("/edit-post")
-    public String editPost(@RequestParam("postId") int postId, Model model) {
-        model.addAttribute("post", postService.findPostById(postId));
-        return "editPost";
     }
 
     @GetMapping("/sort")
@@ -103,7 +106,7 @@ public class PostController {
 
     @RequestMapping("/filter")
     public String filterByUserKeywords(@Param("author") String author, @Param("tags") String tags, @Param("dateTime") String dateTime, Model model) {
-        model.addAttribute("posts", postService.findFilterBy(author, tags, dateTime));
+        model.addAttribute("posts", postService.getFilterBy(author, tags, dateTime));
         model.addAttribute("authors", postRepo.findDistinctByAuthor());
         model.addAttribute("tags", tagRepo.findDistinctByName());
         return "home";
@@ -119,7 +122,7 @@ public class PostController {
 
     @RequestMapping("/register")
     public String register(Model model) {
-        model.addAttribute(new User());
+        model.addAttribute("user", new User());
         return "register";
     }
 
@@ -138,7 +141,7 @@ public class PostController {
     @PostMapping("/register")
     public String registerUser(@ModelAttribute User user, Model model) {
         System.out.println(user);
-        User u = userRepo.findByUserName(user.getEmail());
+        User u = userRepo.findUserByUserName(user.getUserName());
         if(u==null) {
             userService.addUser(user);
             return "redirect:/";
@@ -152,7 +155,8 @@ public class PostController {
 
     @RequestMapping("/my-post")
     public String userPosts(Principal principal, Model model) {
-        model.addAttribute("posts", userService.postsByUser(principal));
+        User user = userService.getUserByUserName(principal.getName());
+        model.addAttribute("posts", postService.getPostsByUser(user));
         return "myPost";
     }
 }
