@@ -12,8 +12,11 @@
 <form action="nested-comment" th:object="${newComment}" method="POST">
     <h1>New Comment</h1>
     <input type="hidden" name="commentId" th:value="${commentId}"><br>
-    <input type="text" name="name" placeholder="Name" required><br>
-    <input type="text" name="email" placeholder="Email" pattern=".+@gmail.com$" required><br>
+    <aside th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+        <input type="hidden" th:value="${#authentication.getName()}" name="userName"><br>
+        <input type="hidden" name="name" placeholder="Name" required><br>
+        <input type="hidden" name="email" placeholder="Email" pattern=".+@gmail.com$" required><br>
+    </aside>
     <input type="text" name="message" placeholder="Comment" required><br>
     <input class="button" type="submit" value="Comment">
 </form>

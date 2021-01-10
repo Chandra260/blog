@@ -3,6 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/home.css" type="text/css" th:href="@{/formsCss.css}">
     <title>Create Tag</title>
 </head>
 <body>
@@ -10,7 +11,7 @@
     <form th:action="@{/create-tag}" method="POST">
         <lebel>Tag Name:</lebel><br>
         <input type="text" name="name" placeholder="Tag Name" required>
-        <input type="submit" name="Create Tag">
+        <input type="submit" name="Create Tag" value="Create Tag">
     </form>
 
 </body>

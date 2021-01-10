@@ -9,15 +9,15 @@
 
 <header th:replace="home::mainHeader"></header>
 
-<form action="register" method="POST" th:object="${user}">
+<form action="register" method="POST" th:object="${newUser}">
     <h1>Register Here!!</h1>
     <p style="color: red;" th:text="${message}"></p>
     <label>Name:</label><br>
-    <input type="text" name="name" placeholder="Enter name" th:value="${user.name}" required><br>
+    <input type="text" name="name" placeholder="Enter name" th:value="${newUser.name}" required><br>
     <label>Email:</label><br>
-    <input type="text" name="email" placeholder="Enter email" pattern=".+@gmail.com$" th:value="${user.email}" required><br>
+    <input type="text" name="email" placeholder="Enter email" pattern=".+@gmail.com$" th:value="${newUser.email}" required><br>
         <label>userName:</label><br>
-        <input type="text" name="userName" th:value="${user.userName}" placeholder="Enter userName" required><br>
+        <input type="text" name="userName" th:value="${newUser.userName}" placeholder="Enter userName" required><br>
     <label>Password:</label><br>
     <input type="password" name="password" placeholder="Create password" required><br>
     <input class="button" type="submit" value="Register">

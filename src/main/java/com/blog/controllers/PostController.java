@@ -122,7 +122,7 @@ public class PostController {
 
     @RequestMapping("/register")
     public String register(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("newUser", new User());
         return "register";
     }
 
@@ -139,15 +139,15 @@ public class PostController {
 //    }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user, Model model) {
-        System.out.println(user);
-        User u = userRepo.findUserByUserName(user.getUserName());
-        if(u==null) {
-            userService.addUser(user);
+    public String registerUser(@ModelAttribute User newUser, Model model) {
+        User user = userRepo.findUserByUserName(newUser.getUserName());
+        if(user==null) {
+            userService.addUser(newUser);
             return "redirect:/";
         } else {
-            model.addAttribute(u);
-            model.addAttribute("message", "Email is already registered !!");
+            model.addAttribute(user);
+            model.addAttribute("newUser", newUser);
+            model.addAttribute("message", "Username already exists !!");
             return "register_error";
         }
     }

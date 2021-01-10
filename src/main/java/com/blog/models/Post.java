@@ -12,6 +12,7 @@ public class Post {
     private int id;
     private String title;
     private String excerpt;
+    @Column(columnDefinition = "TEXT")
     private String content;
     private String author;
     private String publishedAt;

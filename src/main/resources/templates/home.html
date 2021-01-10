@@ -6,85 +6,79 @@
     <title>Home Page</title>
 </head>
 <body>
-<header th:fragment="mainHeader">
-    <div>
-        <span><img src="../static/logo.png" alt="blog-image"></span>
-        <span class="header">Blog Application</span>
-        <aside sec:authorize="isAuthenticated()" style="text-align: right;">
-            Welcome <i><span sec:authentication="name"></span></i>
-<!--            <form action="{user-profile}">-->
-<!--                <a th:href="@{/comment.email}"><span th:text="'[' + ${comment.email} + ']'" >email</span></a>-->
-<!--            <span sec:authentication="authorities"></span>-->
-        </aside>
-    </div>
+
+    <header th:fragment="mainHeader">
+        <div>
+            <span><img src="../static/logo.png" alt="blog-image"></span>
+            <span class="header">Blog Application</span>
+            <div class="show-user" sec:authorize="isAuthenticated()" >
+                <b>Welcome</b>
+                <i><span sec:authentication="name"></span></i>
+            </div>
+        </div>
+        <br>
+
+        <span><a class="headings" href="home.html" th:href="@{/}">Home</a></span>
+        <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/create-post-form}">Create Post</a></span>
+        <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/publish-post}">Publish Post</a></span>
+        <span sec:authorize="hasRole('ADMIN')"><a class="headings" th:href="@{/create-tag}">Create Tag</a></span>
+        <span sec:authorize="hasRole('USER')"><a class="headings" th:href="@{/my-post}">My Posts</a></span>
+        <span sec:authorize="isAnonymous()"><a class="headings" th:href="@{/login}">Login</a></span>
+        <span sec:authorize="isAnonymous()"><a class="headings" th:href="@{/register}">Register</a></span>
+        <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/logout}">Logout</a></span>
+    </header>
     <br>
 
-    <span><a class="headings" href="home.html" th:href="@{/}">Home</a></span>
-    <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/create-post-form}">Create Post</a></span>
-    <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/publish-post}">Publish Post</a></span>
-    <span sec:authorize="hasRole('ADMIN')"><a class="headings" th:href="@{/create-tag}">Create Tag</a></span>
-    <span sec:authorize="hasRole('USER')"><a class="headings" th:href="@{/my-post}">My Posts</a></span>
-    <span sec:authorize="isAnonymous()"><a class="headings" th:href="@{/login}">Login</a></span>
-    <span sec:authorize="isAnonymous()"><a class="headings" th:href="@{/register}">Register</a></span>
-    <span sec:authorize="isAuthenticated()"><a class="headings" th:href="@{/logout}">Logout</a></span>
-</header>
-<br>
+    <aside>
+        <div>
+            <form action="sort" method="GET">
+                <input type="submit" value="sortBy DateTime">
+            </form>
+        </div>
+        <br>
 
-<!--h2>Welcome</h2>-->
-<!--<p>Spring Security Thymeleaf tutorial</p>-->
-<!--<div sec:authorize="hasRole('USER')">Text visible to user.</div>-->
-<!--<div sec:authorize="hasRole('ADMIN')">Text visible to admin.</div>-->
-<!--<div sec:authorize="isAuthenticated()">-->
-<!--    Text visible only to authenticated users.-->
-<!--</div>-->
+        <div>
+            <form action="search-post" method="POST">
+                <input type="text" placeholder="search by author, content, time, tags" name="search">
+                <input class="button" type="submit" value="Search..">
+            </form>
+        </div>
+        <br>
 
-<nav><form action="sort" method="GET">
-    <input type="submit" value="sortBy DateTime">
-</form></nav><br>
-
-<nav>
-    <form action="search-post" method="POST">
-        <input type="text" placeholder="search by author, content, time, tags" name="search">
-        <input class="button" type="submit" value="Search..">
-    </form>
-</nav>
-<br>
-
-<form action="filter">
-    Author:
-    <div th:each="author : ${authors}">
-        <input type="checkbox" th:value="${author}" name="author"><span th:text="${author}"></span>
-    </div>
-    Tags:
-    <div th:each="tagName : ${tags}">
-        <input type="checkbox" th:value="${tagName}" name="tags"><span th:text="${tagName}"></span>
-    </div>
-    PublishedDateTime:
-    <div th:each="post : ${posts}">
-        <input type="checkbox" th:value="${post.publishedAt}" name="dateTime"><span th:text="${post.publishedAt}"></span>
-    </div>
-    <input class="button" type="submit" value="filter">
-</form>
-<br>
-
-<!--            <h1 th:text="${test}"></h1>-->
-<span th:each="post : ${posts}"></span>
-<article>
-    <div class="posts" th:each="post : ${posts}">
-        <h2 th:text="${post.title}">Post Title</h2>
-        <i>Posted on</i>
-        <span th:text="${post.publishedAt}">12-Dec-2020</span><br>
-        <!--        <div th:text="${#dates.format(post.publishedAt, 'dd-MMMM-yyyy')}">dateFormat</div>-->
-        <p>Author: <span th:text="${post.author}"></span><p>
-        <p>Tags: <span th:text="${post.tags}"></span></p>
-        <p><span th:text="${post.excerpt}"></span>..</p>
-
-        <form th:action="@{/view-post/{postId}(postId=${post.id})}">
-<!--            <input type="hidden" th:value="${post.id}" name="postId">-->
-            <input type="submit" value="Read more..">
+        <form action="filter">
+            Author:
+            <div th:each="author : ${authors}">
+                <input type="checkbox" th:value="${author}" name="author"><span th:text="${author}"></span>
+            </div>
+            Tags:
+            <div th:each="tagName : ${tags}">
+                <input type="checkbox" th:value="${tagName}" name="tags"><span th:text="${tagName}"></span>
+            </div>
+            PublishedDateTime:
+            <div th:each="post : ${posts}">
+                <input type="checkbox" th:value="${post.publishedAt}" name="dateTime"><span
+                    th:text="${post.publishedAt}"></span>
+            </div>
+            <input class="button" type="submit" value="filter">
         </form>
-    </div>
-</article>
+    </aside>
+    <br>
+
+    <span th:each="post : ${posts}"></span>
+    <article>
+        <div class="posts" th:each="post : ${posts}">
+            <h2 th:text="${post.title}">Post Title</h2>
+            <i>Posted on</i>
+            <span th:text="${post.publishedAt}">12-Dec-2020</span><br>
+            <p>Author: <span th:text="${post.author}"></span>
+            <p>Tags: <span th:text="${post.tags}"></span></p>
+            <p><span th:text="${post.excerpt}"></span>..</p>
+
+            <form th:action="@{/view-post/{postId}(postId=${post.id})}">
+                <input type="submit" value="Read more..">
+            </form>
+        </div>
+    </article>
 
 <!--Pagination-->
 <!--    <div>-->
@@ -96,7 +90,6 @@
 <!--            </span><a href="#">Next</a></span>-->
 <!--        </ul>-->
 <!--    </div>-->
-
 
 </body>
 </html>

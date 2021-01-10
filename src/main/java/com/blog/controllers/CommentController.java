@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/view-post/{postId}")
@@ -88,5 +87,9 @@ public class CommentController {
         return "redirect:/view-post/{postId}";
     }
 
-
+    @RequestMapping("/demo-nested-comment")
+    public String demoNestedComment(@PathVariable int postId, Model model, Principal principal) {
+        model.addAttribute("post", postService.getPostById(postId));
+        return "demo-nested-comment";
+    }
 }

@@ -18,7 +18,6 @@
     <p><span th:text="${post.excerpt}"></span></p>
 
     <form th:action="@{/publish-post/{postId}(postId=${post.id})}" method="POST">
-<!--        <input type="hidden" th:value="${post.id}" name="postId">-->
         <input class="button" type="submit" value="Publish">
     </form>
 </article>

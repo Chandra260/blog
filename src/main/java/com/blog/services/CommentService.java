@@ -33,17 +33,13 @@ public class CommentService {
         commentRepo.deleteById(commentId);
     }
 
-    public Comment findCommentById(int postId) {
+    public Comment getCommentById(int commentId) {
         List<Comment> comments = (List<Comment>) commentRepo.findAll();
         for (Comment comment : comments) {
-            if (comment.getId() == postId)
+            if (comment.getId() == commentId)
                 return comment;
         }
         return null;
-    }
-
-    public Comment getCommentById(int commentId) {
-        return commentRepo.findCommentById(commentId);
     }
 
     public String getTime() {
@@ -65,7 +61,7 @@ public class CommentService {
     }
 
     public void updateComment(Comment comment, int postId) {
-        Comment updatedComment = commentService.findCommentById(comment.getId());
+        Comment updatedComment = commentService.getCommentById(comment.getId());
         updatedComment.setName(comment.getName());
         updatedComment.setEmail(comment.getEmail());
         updatedComment.setMessage(comment.getMessage());
