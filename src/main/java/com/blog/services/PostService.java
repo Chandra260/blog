@@ -33,6 +33,7 @@ public class PostService {
     }
 
     public List<Post> getPublishedPosts() {
+        filter.initializeSearch();
         filter.setAuthor(String.join(",", postRepo.findDistinctByAuthor()));
         filter.setTags(String.join(",", tagRepo.findDistinctByName()));
         List<Post> allPosts = getAllPosts();
@@ -42,6 +43,7 @@ public class PostService {
                 publishedPosts.add(post);
             }
         }
+        System.out.println(filter);
         return publishedPosts;
     }
 
@@ -136,6 +138,8 @@ public class PostService {
         String[] authorsArray = filter.getAuthor().split(",");
         String[] tagsArray = filter.getTags().split(",");
         String[] dateTimeArray = filter.getDateTime().split(",");
+
+        System.out.println(filter);
         return postRepo.findAllPublishedPosts(Arrays.asList(authorsArray), Arrays.asList(tagsArray), Arrays.asList(dateTimeArray), filter.getSearch());
     }
 
@@ -154,6 +158,8 @@ public class PostService {
         String[] authorsArray = filter.getAuthor().split(",");
         String[] tagsArray = filter.getTags().split(",");
         String[] dateTimeArray = filter.getDateTime().split(",");
+
+        System.out.println(filter);
         return postRepo.findAllPublishedPosts(Arrays.asList(authorsArray), Arrays.asList(tagsArray), Arrays.asList(dateTimeArray), filter.getSearch());
     }
 

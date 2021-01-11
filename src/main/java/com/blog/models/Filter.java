@@ -17,6 +17,16 @@ public class Filter {
         search = "";
     }
 
+    @Override
+    public String toString() {
+        return "Filter{" +
+                "author='" + author + '\'' +
+                ", tags='" + tags + '\'' +
+                ", dateTime='" + dateTime + '\'' +
+                ", search='" + search + '\'' +
+                '}';
+    }
+
     public String getSearch() {
         return search;
     }
@@ -26,11 +36,15 @@ public class Filter {
     }
 
     public void initializeAuthor() {
-        this.author = "";
+        author = "";
     }
 
     public void initializeTags() {
-        this.tags = "";
+        tags = "";
+    }
+
+    public void initializeSearch() {
+        search = "";
     }
 
     public String getAuthor() {
