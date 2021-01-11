@@ -13,8 +13,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class PostController {
@@ -31,6 +33,13 @@ public class PostController {
     private TagService tagService;
     @Autowired
     private UserRepository userRepo;
+    
+//    @RequestMapping("/")
+//    public ModelAndView redirect()
+//    {
+//        String URL = "https://www.youtube.com/";
+//        return new ModelAndView("redirect:"+URL);//File Disclosure: Spring  vulnerability
+//    }
 
     @RequestMapping("/")
     public String homePage(Model model) {
@@ -98,7 +107,7 @@ public class PostController {
 
     @RequestMapping("/search-post")
     public String searchPosts(@RequestParam("search") String searchKeyword, Model model) {
-        model.addAttribute("posts", postService.getPostsBySearchKeyword(searchKeyword));
+        model.addAttribute("posts", postService.getPostsBySearchKeyword(searchKeyword.toLowerCase()));
         model.addAttribute("authors", postRepo.findDistinctByAuthor());
         model.addAttribute("tags", tagRepo.findDistinctByName());
         return "home";
