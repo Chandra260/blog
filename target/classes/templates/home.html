@@ -54,10 +54,14 @@
             <div th:each="tagName : ${tags}">
                 <input type="checkbox" th:value="${tagName}" name="tags"><span th:text="${tagName}"></span>
             </div>
-            PublishedDateTime:
-            <div th:each="post : ${posts}">
-                <input type="checkbox" th:value="${post.publishedAt}" name="dateTime"><span
-                    th:text="${post.publishedAt}"></span>
+            Last
+            <div>
+<!--            <div th:each="post : ${posts}">-->
+                <input type="radio" value="1" name="dateTime">Last 24 hr
+                <input type="radio" value="7" name="dateTime">Last 7 days
+                <input type="radio" value="14" name="dateTime">Last 2 weeks
+                <input type="radio" value="30" name="dateTime">Last 1 month
+                <input type="radio" value="365" name="dateTime">Last 1 year
             </div>
             <input class="button" type="submit" value="filter">
         </form>
@@ -69,7 +73,8 @@
         <div class="posts" th:each="post : ${posts}">
             <h2 th:text="${post.title}">Post Title</h2>
             <i>Posted on</i>
-            <span th:text="${post.publishedAt}">12-Dec-2020</span><br>
+<!--            <span th:text="${post.publishedAt}">12-Dec-2020</span><br>-->
+            <span th:text="${#dates.format(post.publishedAt, 'dd-MMM-yyyy HH:mm')}"></span>
             <p>Author: <span th:text="${post.author}"></span>
             <p>Tags: <span th:text="${post.tags}"></span></p>
             <p><span th:text="${post.excerpt}"></span>..</p>

@@ -16,16 +16,10 @@ public class TagService {
     @Autowired
     TagRepository tagRepo;
 
-    public String getTime() {
-        DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyy HH:mm:ss");
-        Date date = new Date();
-        return dateFormat.format(date);
-    }
-
     public Tag addTag(String tags) {
         Tag tag = new Tag();
         tag.setName(tags);
-        tag.setCreatedAt(getTime());
+        tag.setCreatedAt(new Date());
         tagRepo.save(tag);
         return tag;
     }

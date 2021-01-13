@@ -1,6 +1,9 @@
 package com.blog.models;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -11,8 +14,12 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
-    private String createdAt;
-    private String updatedAt;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
     @ManyToMany(mappedBy = "tags", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     private List<Post> posts;
 
@@ -37,19 +44,19 @@ public class Tag {
         this.name = name;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

@@ -5,17 +5,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class Filter {
 
-    String author;
-    String tags;
-    String dateTime;
-    String search;
-
-    public Filter() {
-        author = "";
-        tags = "";
-        dateTime = "";
-        search = "";
-    }
+    private String author;
+    private String tags;
+    private int dateTime;
+    private String search;
+    private boolean isAuthorFlag;
+    private boolean isTagsFlag;
 
     @Override
     public String toString() {
@@ -24,7 +19,34 @@ public class Filter {
                 ", tags='" + tags + '\'' +
                 ", dateTime='" + dateTime + '\'' +
                 ", search='" + search + '\'' +
+                ", isAuthorFlag=" + isAuthorFlag +
+                ", isTagsFlag=" + isTagsFlag +
                 '}';
+    }
+
+    public boolean isAuthorFlag() {
+        return isAuthorFlag;
+    }
+
+    public void setAuthorFlag(boolean authorFlag) {
+        isAuthorFlag = authorFlag;
+    }
+
+    public boolean isTagsFlag() {
+        return isTagsFlag;
+    }
+
+    public void setTagsFlag(boolean tagsFlag) {
+        isTagsFlag = tagsFlag;
+    }
+
+    public Filter() {
+        author = "";
+        tags = "";
+        dateTime = 365*5;
+        search = "";
+        isAuthorFlag = true;
+        isTagsFlag = true;
     }
 
     public String getSearch() {
@@ -63,11 +85,11 @@ public class Filter {
         this.tags = tags;
     }
 
-    public String getDateTime() {
+    public int getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(int dateTime) {
         this.dateTime = dateTime;
     }
 }

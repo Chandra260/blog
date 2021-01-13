@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Date;
+
 @Controller
 public class TagController {
 
@@ -26,7 +28,7 @@ public class TagController {
 
     @PostMapping("/create-tag")
     public String createNewTag(@ModelAttribute Tag newTag) {
-        newTag.setCreatedAt(tagService.getTime());
+        newTag.setCreatedAt(new Date());
         tagRepo.save(newTag);
         return "redirect:/";
     }

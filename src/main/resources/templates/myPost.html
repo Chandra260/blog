@@ -14,7 +14,7 @@
         <div class="posts" th:each="post : ${posts}">
             <h2 th:text="${post.title}">Post Title</h2>
             <i>Posted on</i>
-            <span th:text="${post.publishedAt}">12-Dec-2020</span><br>
+            <span th:text="${#dates.format(post.publishedAt, 'dd-MMM-yyyy HH:mm')}"></span>
             <p>Author: <span th:text="${post.author}"></span>
             <p>
             <p>Tags: <span th:text="${post.tags}"></span></p>

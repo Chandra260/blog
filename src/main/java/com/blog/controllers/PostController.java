@@ -105,7 +105,8 @@ public class PostController {
     }
 
     @RequestMapping("/filter")
-    public String filterByUserKeywords(@Param("author") String author, @Param("tags") String tags, @Param("dateTime") String dateTime, Model model) {
+    public String filterByUserKeywords(@Param("author") String author, @Param("tags") String tags,@Param("dateTime") Integer dateTime, Model model) {
+        System.out.println(dateTime);
         model.addAttribute("posts", postService.getFilterBy(author, tags, dateTime));
         model.addAttribute("authors", postRepo.findDistinctByAuthor());
         model.addAttribute("tags", tagRepo.findDistinctByName());

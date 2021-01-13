@@ -6,15 +6,15 @@
     <link rel="stylesheet" href="../static/home.css" type="text/css" th:href="@{/viewPostCss.css}">
     <title>View Blog</title>
 </head>
-<body>
+<p>
 
     <header th:replace="home::mainHeader"></header>
 
-    <article class="view-post">
+    <p class="view-post">
         <h2 th:text="${post.title}">Post Title</h2>
         <i>Posted on</i>
-        <span th:text="${post.createdAt}"></span>
-        <span th:text="${post.publishedAt}">12-Dec-2020</span>
+        <p>Created Date: <span th:text="${#dates.format(post.createdAt, 'dd-MMM-yyyy HH:mm')}"></span></p>
+        <p>Published Date: </p><span th:text="${#dates.format(post.publishedAt, 'dd-MMM-yyyy HH:mm')}"></span></p>
         <p>Author: <span th:text="${post.author}"></span></p>
         <p>Tags: <span th:text="${post.tags}"></span></p>
         <p><span th:text="${post.content}"></span></p>

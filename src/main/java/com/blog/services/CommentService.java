@@ -42,15 +42,9 @@ public class CommentService {
         return null;
     }
 
-    public String getTime() {
-        DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyy HH:mm:ss");
-        Date date = new Date();
-        return dateFormat.format(date);
-    }
-
     public String addComment(Comment newComment, String userName, int postId, Principal principal) {
         newComment.setPost(postService.getPostById(postId));
-        newComment.setCreatedAt(commentService.getTime());
+        newComment.setCreatedAt(new Date());
         if(principal!=null && userName.equals(principal.getName())) {
             newComment.setName(userRepo.findUserByUserName(userName).getName());
             newComment.setEmail(userRepo.findUserByUserName(userName).getEmail());
@@ -65,7 +59,7 @@ public class CommentService {
         updatedComment.setName(comment.getName());
         updatedComment.setEmail(comment.getEmail());
         updatedComment.setMessage(comment.getMessage());
-        updatedComment.setUpdatedAt(commentService.getTime());
+        updatedComment.setUpdatedAt(new Date());
         commentRepo.save(updatedComment);
     }
 

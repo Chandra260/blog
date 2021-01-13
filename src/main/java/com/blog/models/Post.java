@@ -1,5 +1,7 @@
 package com.blog.models;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -15,9 +17,15 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String content;
     private String author;
-    private String publishedAt;
-    private String createdAt;
-    private String updatedAt;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date publishedAt;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
     private boolean isPublished;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
@@ -25,6 +33,30 @@ public class Post {
     private List<Tag> tags;
     @ManyToOne
     private User user;
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getPublishedAt() {
+        return publishedAt;
+    }
+
+    public void setPublishedAt(Date publishedAt) {
+        this.publishedAt = publishedAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     public User getUser() {
         return user;
@@ -49,21 +81,6 @@ public class Post {
     public void setComments(List<Comment> comment) {
         this.comments = comment;
     }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-//    public Post(String title, String excerpt, String author, String publishedAt) {
-//        this.title = title;
-//        this.excerpt = excerpt;
-//        this.author = author;
-//        this.publishedAt = publishedAt;
-//    }
 
     public int getId() {
         return id;
@@ -105,28 +122,12 @@ public class Post {
         this.author = author;
     }
 
-    public String getPublishedAt() {
-        return publishedAt;
-    }
-
-    public void setPublishedAt(String publishedAt) {
-        this.publishedAt = publishedAt;
-    }
-
     public boolean isPublished() {
         return isPublished;
     }
 
     public void setPublished(boolean published) {
         isPublished = published;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public Post() {
@@ -137,16 +138,16 @@ public class Post {
     public String toString() {
         return "Post{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
-                ", excerpt='" + excerpt + '\'' +
-                ", content='" + content + '\'' +
-                ", author='" + author + '\'' +
-                ", publishedAt='" + publishedAt + '\'' +
-                ", isPublished=" + isPublished +
-                ", updatedAt='" + updatedAt + '\'' +
-                ", comment=" + comments +
-                ", tags=" + tags +
-                ", createdAt=" + createdAt +
+//                ", title='" + title + '\'' +
+//                ", excerpt='" + excerpt + '\'' +
+//                ", content='" + content + '\'' +
+//                ", author='" + author + '\'' +
+//                ", publishedAt='" + publishedAt + '\'' +
+//                ", isPublished=" + isPublished +
+//                ", updatedAt='" + updatedAt + '\'' +
+//                ", comment=" + comments +
+//                ", tags=" + tags +
+//                ", createdAt=" + createdAt +
                 '}';
     }
 }
