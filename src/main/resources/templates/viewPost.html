@@ -6,11 +6,11 @@
     <link rel="stylesheet" href="../static/home.css" type="text/css" th:href="@{/viewPostCss.css}">
     <title>View Blog</title>
 </head>
-<p>
+<body>
 
     <header th:replace="home::mainHeader"></header>
 
-    <p class="view-post">
+    <article class="view-post">
         <h2 th:text="${post.title}">Post Title</h2>
         <i>Posted on</i>
         <p>Created Date: <span th:text="${#dates.format(post.createdAt, 'dd-MMM-yyyy HH:mm')}"></span></p>

@@ -2,87 +2,19 @@ package com.blog.models;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Component
 public class Filter {
 
-    private String author;
-    private String tags;
     private int dateTime;
-    private String search;
-    private boolean isAuthorFlag;
-    private boolean isTagsFlag;
-
-    @Override
-    public String toString() {
-        return "Filter{" +
-                "author='" + author + '\'' +
-                ", tags='" + tags + '\'' +
-                ", dateTime='" + dateTime + '\'' +
-                ", search='" + search + '\'' +
-                ", isAuthorFlag=" + isAuthorFlag +
-                ", isTagsFlag=" + isTagsFlag +
-                '}';
-    }
-
-    public boolean isAuthorFlag() {
-        return isAuthorFlag;
-    }
-
-    public void setAuthorFlag(boolean authorFlag) {
-        isAuthorFlag = authorFlag;
-    }
-
-    public boolean isTagsFlag() {
-        return isTagsFlag;
-    }
-
-    public void setTagsFlag(boolean tagsFlag) {
-        isTagsFlag = tagsFlag;
-    }
+    private List<Post> homePagePosts;
 
     public Filter() {
-        author = "";
-        tags = "";
         dateTime = 365*5;
-        search = "";
-        isAuthorFlag = true;
-        isTagsFlag = true;
-    }
-
-    public String getSearch() {
-        return search;
-    }
-
-    public void setSearch(String search) {
-        this.search = search;
-    }
-
-    public void initializeAuthor() {
-        author = "";
-    }
-
-    public void initializeTags() {
-        tags = "";
-    }
-
-    public void initializeSearch() {
-        search = "";
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
     }
 
     public int getDateTime() {
@@ -92,4 +24,33 @@ public class Filter {
     public void setDateTime(int dateTime) {
         this.dateTime = dateTime;
     }
+
+    public List<Post> getHomePagePosts() {
+        return homePagePosts;
+    }
+
+    public void setHomePagePosts(List<Post> homePagePosts) {
+        this.homePagePosts = homePagePosts;
+    }
+
+    public List<Post> filteredPosts(List<Post> resultedPosts) {
+        Set<Integer> resultedPostsId = new HashSet<Integer>();
+        for (Post post : resultedPosts) {
+            if (!resultedPostsId.contains(post.getId())) {
+                resultedPostsId.add(post.getId());
+            }
+        }
+
+        Set<Post> result = new HashSet<Post>();
+        List<Post> posts = getHomePagePosts();
+        for (Post post : posts) {
+            for (Integer setId : resultedPostsId) {
+                if (post.getId() == setId) {
+                    result.add(post);
+                }
+            }
+        }
+        return new ArrayList<Post>(result);
+    }
+
 }

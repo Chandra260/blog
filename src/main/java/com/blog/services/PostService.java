@@ -34,19 +34,6 @@ public class PostService {
     }
 
     public List<Post> getPublishedPosts() {
-
-//        Calendar cal = Calendar.getInstance();
-//        Date today = cal.getTime();
-//        System.out.println(today);
-//        cal.add(Calendar.MONTH, -7);
-//        Date expiryDate = cal.getTime();
-//        System.out.println(expiryDate);
-        filter.setDateTime(365*5);
-        filter.setAuthorFlag(true);
-        filter.setTagsFlag(true);
-        filter.initializeSearch();
-        filter.setAuthor(String.join(",", postRepo.findDistinctByAuthor()));
-        filter.setTags(String.join(",", tagRepo.findDistinctByName()));
         List<Post> allPosts = getAllPosts();
         ArrayList<Post> publishedPosts = new ArrayList<Post>();
         for (Post post : allPosts) {
@@ -54,7 +41,8 @@ public class PostService {
                 publishedPosts.add(post);
             }
         }
-        System.out.println(filter);
+        filter.setHomePagePosts(publishedPosts);
+        System.out.println("*"+filter);
         return publishedPosts;
     }
 
@@ -69,13 +57,6 @@ public class PostService {
         return unpublishedPosts;
     }
 
-//    public void getTime() {
-//        DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyy HH:mm:ss");
-//        Date date = new Date();
-//        System.out.println(date.getTime());
-//        System.out.println(Instant.now().minus(Duration.ofDays(7)));
-//    }
-
     public Post getPostById(int postId) {
         List<Post> posts = (List<Post>) postRepo.findAll();
         for (Post post : posts) {
@@ -87,7 +68,6 @@ public class PostService {
     }
 
     public void addPost(Post newPost, String tags, Principal principal) {
-//        Calendar cal = Calendar.getInstance();
         List<Tag> tagsList = new ArrayList<>();
         String[] tagsArray = tags.split(",");
         for (String tag : tagsArray) {
@@ -96,7 +76,6 @@ public class PostService {
         newPost.setTags(tagsList);
         newPost.setExcerpt(newPost.getContent().substring(0, Math.min(newPost.getContent().length(), 50)));
         newPost.setCreatedAt(new Date());
-//        System.out.println(cal.getTime());
         newPost.setPublished(false);
         if(newPost.getAuthor().equals(principal.getName())) {
             newPost.setAuthor(userRepo.findUserByUserName(principal.getName()).getName());
@@ -122,9 +101,6 @@ public class PostService {
         }
 
         Post updatedPost = getPostById(post.getId());
-//        Optional<Post> postDb = postRepo.findPostById(post.getId());
-//        Post updatedPost = postDb.get();
-        System.out.println(updatedPost);
         updatedPost.setTags(tagsList);
         updatedPost.setTitle(post.getTitle());
         updatedPost.setAuthor(post.getAuthor());
@@ -139,7 +115,7 @@ public class PostService {
     }
 
     public List<Post> getSortedPostsByPublishedDate() {
-        List<Post> sortedPosts = getPublishedPosts();
+        List<Post> sortedPosts = filter.getHomePagePosts();
         Collections.sort(sortedPosts, new Comparator<Post>() {
             public int compare(Post post1, Post post2) {
                 return post2.getPublishedAt().compareTo(post1.getPublishedAt());
@@ -149,75 +125,50 @@ public class PostService {
     }
 
     public List<Post> getPostsBySearchKeyword(String searchKeyword) {
-        filter.setSearch(searchKeyword);
-        String[] authorsArray = filter.getAuthor().split(",");
-        String[] tagsArray = filter.getTags().split(",");
-//        String[] dateTimeArray = filter.getDateTime().split(",");
-        filter.setAuthorFlag(true);
-        filter.setTagsFlag(true);
-
-        System.out.println("dateTime: "+filter.getDateTime());
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.HOUR_OF_DAY, -filter.getDateTime()*24);
-        Date expiryDate = cal.getTime();
-        System.out.println(expiryDate);
-        System.out.println(filter);
-        List<Post> resultedPosts = postRepo.findAllPublishedPosts(Arrays.asList(authorsArray), Arrays.asList(tagsArray), filter.getSearch(), expiryDate);
-//        List<Post> resultedPosts = postRepo.findAllPublishedPosts(expiryDate);
-        List<Post> posts = new ArrayList<Post>();
-        Set<Integer> resultedPostsId = new HashSet<Integer>();
-        for(Post post : resultedPosts) {
-            if(!resultedPostsId.contains(post.getId())) {
-                posts.add(getPostById(post.getId()));
-                resultedPostsId.add(post.getId());
-            }
-        }
-        System.out.println("***********");
-        return posts;
+        List<Post> posts = postRepo.findAllBySearchedKeyword(searchKeyword);
+        return postRepo.findAllBySearchedKeyword(searchKeyword);
     }
 
     public List<Post> getFilterBy(String author, String tags, Integer dateTime) {
-        if (filter.isAuthorFlag() && author != null) {
-            filter.initializeAuthor();
-            filter.setAuthorFlag(false);
-        }
-        if (filter.isTagsFlag() && tags != null) {
-            filter.initializeTags();
-            filter.setTagsFlag(false);
-        }
-        if(dateTime!=null) {
-            filter.setDateTime(dateTime);
+        Set<Post> result = new HashSet<Post>();
+
+        if(author==null && tags==null && dateTime==null) {
+            return filter.getHomePagePosts();
         }
 
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.HOUR_OF_DAY, -filter.getDateTime()*24);
-        Date expiryDate = cal.getTime();
-        System.out.println(expiryDate);
+        else {
 
-        filter.setAuthor(filter.getAuthor() + "," + author);
-        filter.setTags(filter.getTags() + "," + tags);
-
-
-        String[] authorsArray = filter.getAuthor().split(",");
-        String[] tagsArray = filter.getTags().split(",");
-//        String[] dateTimeArray = filter.getDateTime().split(",");
-
-        System.out.println(filter);
-        System.out.println(dateTime);
-//        System.out.println(filter.getDateTime());
-        List<Post> resultedPosts = postRepo.findAllPublishedPosts(Arrays.asList(authorsArray), Arrays.asList(tagsArray), filter.getSearch(), expiryDate);
-//        List<Post> resultedPosts = postRepo.findAllPublishedPosts(expiryDate);
-
-        List<Post> posts = new ArrayList<Post>();
-        Set<Integer> resultedPostsId = new HashSet<Integer>();
-        for(Post post : resultedPosts) {
-            if(!resultedPostsId.contains(post.getId())) {
-                posts.add(getPostById(post.getId()));
-                resultedPostsId.add(post.getId());
+            if (author != null) {
+                String[] authorsArray = author.split(",");
+                List<Post> resultedPosts = postRepo.findAllByAuthor(Arrays.asList(authorsArray));
+                result.addAll(filter.filteredPosts(resultedPosts));
             }
+
+            if (tags != null) {
+                String[] tagsArray = tags.split(",");
+                List<Post> resultedPosts = postRepo.findAllByTags(Arrays.asList(tagsArray));
+                result.addAll(filter.filteredPosts(resultedPosts));
+            }
+
+            if (dateTime != null) {
+                filter.setDateTime(dateTime);
+
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.HOUR_OF_DAY, -filter.getDateTime() * 24);
+                Date expiryDate = cal.getTime();
+                System.out.println(expiryDate);
+
+                List<Post> resultedPosts = postRepo.findAllByDate(expiryDate);
+
+                result.addAll(filter.filteredPosts(resultedPosts));
+            }
+
         }
-        System.out.println("***********");
-        return posts;
+
+
+        filter.setHomePagePosts(new ArrayList<Post>(result));
+        return filter.getHomePagePosts();
+
     }
 
 //    public List<Post> findPaginated(int pageNo) {

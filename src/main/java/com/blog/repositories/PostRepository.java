@@ -18,35 +18,20 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 //    between now() - interval ?3 and now()
 
     @Query("select distinct post from Post post join post.tags postTag where post.isPublished=true and " +
-            "(lower(post.title) like %?3% or lower(post.content) like %?3% or lower(post.author) like %?3% or lower(postTag.name) like %?3%)" +
-            " and (post.author in ?1 and postTag.name in ?2 and post.publishedAt > ?4 )" +
-            " order by post.publishedAt desc")
-    public List<Post> findAllPublishedPosts(List author, List tags, String searchKeyword, Date dateTime);
+            "lower(post.title) like %?1% or lower(post.content) like %?1% or lower(post.author) like %?1% or lower(postTag.name) like %?1%")
+    public List<Post> findAllBySearchedKeyword(String searchKeyword);
 
+    @Query("select distinct post from Post post where post.isPublished=true and post.author in ?1")
+    public List<Post> findAllByAuthor(List author);
 
-//    @Query(nativeQuery = true, value="select * " +
-//            "from posts,tags,posts_tags " +
-//            "where posts.id = posts_tags.posts_id and tags.id = posts_tags.tags_id and " +
-//            "(lower(posts.title) like %:searchKeyword% or " +
-//            "lower(posts.content) like %:searchKeyword% or " +
-//            "lower(posts.author) like %:searchKeyword% or " +
-//            "lower(tags.name) like %:searchKeyword%)" +
-//            " and (posts.author in :author and tags.name in :tags and posts.published_at > current_date - interval :dateTime)" +
-//            " order by posts.published_at desc")
-//public List<Post> findAllPublishedPosts(@Param("author") List author, @Param("tags") List tags, @Param("searchKeyword") String searchKeyword, @Param("dateTime") String dateTime);
-//
-//    @Query(nativeQuery = true, value="select * " +
-//            "from posts,tags,posts_tags " +
-//            "where posts.id = posts_tags.posts_id and tags.id = posts_tags.tags_id and " +
-//            " posts.published_at > current_date - interval '1 days'")
-//            " posts.published_at > :dateTime")
-//    public List<Post> findAllPublishedPosts(@Param("dateTime") Date dateTime);
+    @Query("select distinct post from Post post join post.tags postTag where post.isPublished=true and postTag.name in ?1")
+    public List<Post> findAllByTags(List author);
+
+    @Query("select distinct post from Post post where post.isPublished=true and post.publishedAt > ?1")
+    public List<Post> findAllByDate(Date date);
 
     @Query("select distinct author from Post order by author asc")
     public List<String> findDistinctByAuthor();
-
-    @Query("select post from Post post where post.id = ?1")
-    public Optional<Post> findPostById(int postId);
 
     @Query("select post from Post post where post.user = ?1")
     public List<Post> findPostsByUser(User user);
